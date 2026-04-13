@@ -1,0 +1,43 @@
+# 환경 변수 (API 키 등)
+.env
+
+# 파인튜닝된 모델 (수 GB)
+models/
+
+# Spider 데이터셋 (별도 다운로드)
+bench_datasets/spider/
+
+# FAISS 인덱스 (재생성 가능)
+data/faiss_query.index
+data/query_meta.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 가상환경
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude 내부
+.claude/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

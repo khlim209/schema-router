@@ -1,0 +1,2144 @@
+[
+  {
+    "question": "What are the IDs of all the players in the database?",
+    "db": "baseball_1",
+    "table": "player",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the names of all the car makers in the database?",
+    "db": "car_1",
+    "table": "car_makers",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "모든 직원의 ID와 급여 목록을 보여주세요.",
+    "db": "baseball_1",
+    "table": "salary",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "사람들이 가장 많이 사는 대륙은 어디인가요?",
+    "db": "car_1",
+    "table": "continents",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "밀의 ID는 무엇인가요?",
+    "db": "architecture",
+    "table": "mill",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique trip IDs available in the database?",
+    "db": "bike_1",
+    "table": "trip",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 ID를 가진 클럽은 무엇인가요?",
+    "db": "club_1",
+    "table": "club",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 역의 ID를 기준으로 그 역의 정보를 조회할 수 있나요?",
+    "db": "bike_1",
+    "table": "station",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 밀들이 데이터베이스에 저장되어 있나요?",
+    "db": "architecture",
+    "table": "mill",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 직원의 ID 정보를 조회하는 쿼리는 어떻게 작성하나요?",
+    "db": "assets_maintenance",
+    "table": "staff",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What types of incidents are recorded in the database?",
+    "db": "behavior_monitoring",
+    "table": "ref_incident_type",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique model identifiers available in the model_list?",
+    "db": "car_1",
+    "table": "model_list",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What is the list of all manager awards?",
+    "db": "baseball_1",
+    "table": "manager_award",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "제3자 회사의 총 개수는 몇 개인가요?",
+    "db": "assets_maintenance",
+    "table": "third_party_companies",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are all the unique IDs of the addresses in the database?",
+    "db": "behavior_monitoring",
+    "table": "addresses",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "전투의 ID는 무엇입니까?",
+    "db": "battle_death",
+    "table": "battle",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 공항에 등록된 모든 항공기는 어떤 것들이 있나요?",
+    "db": "aircraft",
+    "table": "airport_aircraft",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "가장 최근에 진행된 매치의 ID는 무엇인가요?",
+    "db": "aircraft",
+    "table": "match",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the contents of the assessment notes for each ID in the database?",
+    "db": "behavior_monitoring",
+    "table": "assessment_notes",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all the students in the database?",
+    "db": "activity_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What is the unique identifier for each postseason event?",
+    "db": "baseball_1",
+    "table": "postseason",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "가장 많이 사용되는 엔지니어 기술은 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "engineer_skills",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 명예의 전당에서 등록된 모든 멤버의 ID는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "hall_of_fame",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 나라들이 데이터베이스에 등록되어 있나요?",
+    "db": "car_1",
+    "table": "countries",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique fault IDs recorded in the fault log?",
+    "db": "assets_maintenance",
+    "table": "fault_log",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all the people in the database?",
+    "db": "candidate_poll",
+    "table": "people",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "가장 많은 국가를 포함하는 대륙은 무엇인가요?",
+    "db": "car_1",
+    "table": "continents",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 홈 게임의 총 개수는 몇 개인가요?",
+    "db": "baseball_1",
+    "table": "home_game",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 교수의 참여 기록을 조회하려면 어떤 쿼리를 사용해야 하나요?",
+    "db": "activity_1",
+    "table": "faculty_participates_in",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 학생의 ID는 무엇인가요?",
+    "db": "behavior_monitoring",
+    "table": "students",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 상태의 ID가 데이터베이스에 존재하는지 확인할 수 있나요?",
+    "db": "bike_1",
+    "table": "status",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all the albums in the database?",
+    "db": "chinook_1",
+    "table": "album",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "영화관의 ID는 무엇인가요?",
+    "db": "cinema",
+    "table": "cinema",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 매니저 상의 ID가 존재하는지 확인할 수 있나요?",
+    "db": "baseball_1",
+    "table": "manager_award",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 주소의 ID는 무엇인가요?",
+    "db": "behavior_monitoring",
+    "table": "addresses",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이번 포스트시즌에서 사용된 게시물의 ID는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "postseason",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 저장된 모든 책의 ID는 무엇인가요?",
+    "db": "book_2",
+    "table": "book",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of the students currently in detention?",
+    "db": "behavior_monitoring",
+    "table": "students_in_detention",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 부품 ID에 대한 상세 정보를 조회할 수 있습니까?",
+    "db": "assets_maintenance",
+    "table": "parts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "매니저 상을 받은 모든 사람의 ID는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "manager_award",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "여행 ID가 'trip123'인 여행의 정보는 어떤 것인가요?",
+    "db": "bike_1",
+    "table": "trip",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 손님의 ID는 무엇인가요?",
+    "db": "apartment_rentals",
+    "table": "guests",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 미디어 타입의 ID는 무엇인가요?",
+    "db": "chinook_1",
+    "table": "mediatype",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "조종사의 ID는 무엇인가요?",
+    "db": "aircraft",
+    "table": "pilot",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 항공기의 ID를 사용하여 해당 항공기의 정보를 조회할 수 있나요?",
+    "db": "aircraft",
+    "table": "aircraft",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 아티스트의 ID는 무엇인가요?",
+    "db": "chinook_1",
+    "table": "artist",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all the pilots in the database?",
+    "db": "aircraft",
+    "table": "pilot",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 청구서의 ID는 무엇인가요?",
+    "db": "chinook_1",
+    "table": "invoice",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "자산의 고유 ID는 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "assets",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "고객의 ID 목록은 무엇인가요?",
+    "db": "chinook_1",
+    "table": "customer",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What is the list of all unique faculty IDs in the database?",
+    "db": "activity_1",
+    "table": "faculty",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the different statuses available in the view_unit_status table?",
+    "db": "apartment_rentals",
+    "table": "view_unit_status",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "모든 경기의 ID 목록을 조회할 수 있나요?",
+    "db": "city_record",
+    "table": "match",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 알레르기 유형이 데이터베이스에 저장되어 있나요?",
+    "db": "allergy_1",
+    "table": "allergy_type",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 브라우저가 가속기와 호환됩니까?",
+    "db": "browser_web",
+    "table": "accelerator_compatible_browser",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 학생의 정보를 조회할 수 있는 방법은 무엇인가요?",
+    "db": "allergy_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 'people' 테이블에 등록된 모든 사람의 목록은 무엇인가요?",
+    "db": "body_builder",
+    "table": "people",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "브라우저의 전체 목록을 보여줄 수 있나요?",
+    "db": "browser_web",
+    "table": "browser",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different aircraft types associated with each airport?",
+    "db": "aircraft",
+    "table": "airport_aircraft",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 포스트시즌의 ID를 검색할 수 있나요?",
+    "db": "baseball_1",
+    "table": "postseason",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the available track IDs in the database?",
+    "db": "chinook_1",
+    "table": "track",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 ID를 가진 브라우저의 정보를 조회할 수 있나요?",
+    "db": "browser_web",
+    "table": "browser",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers for the fault log parts in the database?",
+    "db": "assets_maintenance",
+    "table": "fault_log_parts",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 팀의 ID에 대한 정보를 찾을 수 있을까요?",
+    "db": "baseball_1",
+    "table": "team",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 어떤 공원이 존재하는지 목록을 알 수 있을까요?",
+    "db": "baseball_1",
+    "table": "park",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "웹 클라이언트 가속기 테이블에 있는 모든 고유 ID는 무엇인가요?",
+    "db": "browser_web",
+    "table": "web_client_accelerator",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "일정에서 특정 ID를 가진 항목은 무엇인가요?",
+    "db": "cinema",
+    "table": "schedule",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 학생이 구금된 기록이 있는지 확인할 수 있을까요?",
+    "db": "behavior_monitoring",
+    "table": "students_in_detention",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different match IDs available in the database?",
+    "db": "city_record",
+    "table": "match",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 구금된 사람들의 목록을 보여줄 수 있나요?",
+    "db": "behavior_monitoring",
+    "table": "detention",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "가장 최근의 기상 데이터는 언제 기록되었나요?",
+    "db": "bike_1",
+    "table": "weather",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 도시의 ID를 모두 나열해 줄 수 있나요?",
+    "db": "city_record",
+    "table": "city",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 기록된 모든 결함 로그 부품의 ID는 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "fault_log_parts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 사고 유형은 무엇인가요?",
+    "db": "behavior_monitoring",
+    "table": "ref_incident_type",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 모든 선생님들의 정보를 조회할 수 있나요?",
+    "db": "behavior_monitoring",
+    "table": "teachers",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 앨범의 ID를 알고 있나요?",
+    "db": "chinook_1",
+    "table": "album",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "유지보수 엔지니어의 ID는 무엇입니까?",
+    "db": "assets_maintenance",
+    "table": "maintenance_engineers",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "항공기 목록에 있는 모든 항공기의 ID는 무엇인가요?",
+    "db": "aircraft",
+    "table": "aircraft",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "가장 최근에 추가된 교수의 ID는 무엇인가요?",
+    "db": "activity_1",
+    "table": "faculty",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 테이블에서 몇 명의 교수들이 참여하고 있나요?",
+    "db": "activity_1",
+    "table": "faculty_participates_in",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "죽음 기록의 전체 개수는 몇 개인가요?",
+    "db": "battle_death",
+    "table": "death",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What browsers are compatible with the accelerator?",
+    "db": "browser_web",
+    "table": "accelerator_compatible_browser",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 유지보수 계약의 세부정보는 어떻게 확인할 수 있습니까?",
+    "db": "assets_maintenance",
+    "table": "maintenance_contracts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 학생의 ID는 무엇입니까?",
+    "db": "behavior_monitoring",
+    "table": "student_addresses",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What is the unique identifier for each climber in the database?",
+    "db": "climbing",
+    "table": "climber",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 고객의 ID를 조회할 수 있나요?",
+    "db": "chinook_1",
+    "table": "customer",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What skills are required to fix issues in the database?",
+    "db": "assets_maintenance",
+    "table": "skills_required_to_fix",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique country identifiers in the database?",
+    "db": "car_1",
+    "table": "countries",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 여행의 총 개수는 몇 개인가요?",
+    "db": "bike_1",
+    "table": "trip",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 수용 유형의 ID에 대한 정보를 어떻게 검색할 수 있나요?",
+    "db": "behavior_monitoring",
+    "table": "ref_detention_type",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 차량의 ID는 무엇인가요?",
+    "db": "car_1",
+    "table": "cars_data",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 멤버가 클럽에 소속되어 있는지 알고 싶습니다.",
+    "db": "club_1",
+    "table": "member_of_club",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID에 해당하는 죽음 기록의 세부 정보를 알 수 있나요?",
+    "db": "battle_death",
+    "table": "death",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 총 주소의 수는 몇 개인가요?",
+    "db": "behavior_monitoring",
+    "table": "addresses",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 차의 이름은 무엇인가요?",
+    "db": "car_1",
+    "table": "car_names",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers of all individuals in the database?",
+    "db": "body_builder",
+    "table": "people",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 날짜에 예약된 아파트의 ID는 무엇인가요?",
+    "db": "apartment_rentals",
+    "table": "apartment_bookings",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 아파트 건물의 ID는 무엇인가요?",
+    "db": "apartment_rentals",
+    "table": "apartment_buildings",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 테이블에서 가장 높은 온도의 ID는 무엇인가요?",
+    "db": "city_record",
+    "table": "temperature",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "각 공항에 있는 국가의 수는 어떻게 되나요?",
+    "db": "aircraft",
+    "table": "airport",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "선생님들의 ID는 무엇인가요?",
+    "db": "behavior_monitoring",
+    "table": "teachers",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique colleges that players are associated with in the database?",
+    "db": "baseball_1",
+    "table": "player_college",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 어떤 기술들이 저장되어 있나요?",
+    "db": "assets_maintenance",
+    "table": "skills",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 'body_builder'의 id 값을 가진 모든 항목은 무엇인가요?",
+    "db": "body_builder",
+    "table": "body_builder",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different genres available in the database?",
+    "db": "chinook_1",
+    "table": "genre",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 ID를 가진 트랙이 데이터베이스에 존재하는지 확인할 수 있나요?",
+    "db": "chinook_1",
+    "table": "track",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different detention IDs recorded in the database?",
+    "db": "behavior_monitoring",
+    "table": "detention",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "엔지니어의 기술 목록에는 어떤 기술들이 포함되어 있나요?",
+    "db": "assets_maintenance",
+    "table": "engineer_skills",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers for the airports in the database?",
+    "db": "aircraft",
+    "table": "airport",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "학생의 ID는 무엇인가요?",
+    "db": "activity_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 등록된 손님은 몇 명인가요?",
+    "db": "apartment_rentals",
+    "table": "guests",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all players who have received an award?",
+    "db": "baseball_1",
+    "table": "player_award",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "학생 데이터베이스에 등록된 총 학생 수는 몇 명인가요?",
+    "db": "club_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 이벤트에 참여하고 있는 사람들의 ID를 알고 싶습니다.",
+    "db": "activity_1",
+    "table": "participates_in",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 팀의 모든 프랜차이즈 목록은 무엇인가요?",
+    "db": "baseball_1",
+    "table": "team_franchise",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 아파트의 시설 목록은 무엇인가요?",
+    "db": "apartment_rentals",
+    "table": "apartment_facilities",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 사람의 정보는 어떻게 확인할 수 있나요?",
+    "db": "body_builder",
+    "table": "people",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different activities listed in the database?",
+    "db": "activity_1",
+    "table": "activity",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 어떤 건축가들이 존재합니까?",
+    "db": "architecture",
+    "table": "architect",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 도시의 호스팅 서비스 수는 얼마입니까?",
+    "db": "city_record",
+    "table": "hosting_city",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "후보자 데이터베이스에 등록된 모든 후보자의 수는 몇 명입니까?",
+    "db": "candidate_poll",
+    "table": "candidate",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all recorded deaths in the database?",
+    "db": "battle_death",
+    "table": "death",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "사고 유형의 총 개수는 얼마인가요?",
+    "db": "behavior_monitoring",
+    "table": "ref_incident_type",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different statuses available in the database?",
+    "db": "bike_1",
+    "table": "status",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 알레르기 유형의 ID는 무엇인가요?",
+    "db": "allergy_1",
+    "table": "allergy_type",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "학생 데이터베이스에서 등록된 학생의 수는 몇 명입니까?",
+    "db": "behavior_monitoring",
+    "table": "students",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 플레이어의 정보를 검색할 수 있는 방법은 무엇인가요?",
+    "db": "baseball_1",
+    "table": "player",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique IDs of all the cinemas in the database?",
+    "db": "cinema",
+    "table": "cinema",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the different types of detention represented in the database?",
+    "db": "behavior_monitoring",
+    "table": "ref_detention_type",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "데이터베이스에 등록된 모든 아티스트의 목록을 보여줄 수 있나요?",
+    "db": "chinook_1",
+    "table": "artist",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 특정 ID에 해당하는 급여는 얼마인가요?",
+    "db": "baseball_1",
+    "table": "salary",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all candidates in the database?",
+    "db": "candidate_poll",
+    "table": "candidate",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique team identifiers in the database?",
+    "db": "baseball_1",
+    "table": "team",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique identifiers for each bridge in the database?",
+    "db": "architecture",
+    "table": "bridge",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all maintenance engineers in the database?",
+    "db": "assets_maintenance",
+    "table": "maintenance_engineers",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 영화의 ID를 찾으려면 어떻게 해야 합니까?",
+    "db": "cinema",
+    "table": "film",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different types of aircraft listed in the database?",
+    "db": "aircraft",
+    "table": "aircraft",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What faculty members are participating in the program?",
+    "db": "activity_1",
+    "table": "faculty_participates_in",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 기술의 ID는 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "skills",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 아파트 단지에 어떤 시설이 제공되나요?",
+    "db": "apartment_rentals",
+    "table": "apartment_facilities",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "학생 테이블에 등록된 총 학생 수는 몇 명인가요?",
+    "db": "activity_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 id에 해당하는 body_builder의 상세정보는 무엇인가요?",
+    "db": "body_builder",
+    "table": "body_builder",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 아파트의 ID는 무엇인가요?",
+    "db": "apartment_rentals",
+    "table": "apartments",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 회사 유형이 데이터베이스에 저장되어 있나요?",
+    "db": "assets_maintenance",
+    "table": "ref_company_types",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all the assets in the database?",
+    "db": "assets_maintenance",
+    "table": "assets",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 staff의 전체 목록을 확인할 수 있는 방법은 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "staff",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers for each park in the database?",
+    "db": "baseball_1",
+    "table": "park",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "직원의 ID는 무엇인가요?",
+    "db": "chinook_1",
+    "table": "employee",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all invoices in the database?",
+    "db": "chinook_1",
+    "table": "invoice",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "모든 올스타 선수의 id는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "all_star",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 웹 클라이언트 가속기가 존재하는지 확인할 수 있나요?",
+    "db": "browser_web",
+    "table": "web_client_accelerator",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 출판물의 ID는 무엇인가요?",
+    "db": "book_2",
+    "table": "publication",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 기술이 문제를 해결하는 데 필요한가요?",
+    "db": "assets_maintenance",
+    "table": "skills_required_to_fix",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all maintenance contracts in the database?",
+    "db": "assets_maintenance",
+    "table": "maintenance_contracts",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "유지보수 계약의 ID는 무엇입니까?",
+    "db": "assets_maintenance",
+    "table": "maintenance_contracts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 활동들이 이 데이터베이스에 저장되어 있나요?",
+    "db": "activity_1",
+    "table": "activity",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "문제를 해결하기 위해 필요한 기술의 목록은 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "skills_required_to_fix",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "영화관 데이터베이스에 등록된 영화관의 총 수는 몇 개인가요?",
+    "db": "cinema",
+    "table": "cinema",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 아파트 예약의 ID가 가장 많이 사용되었나요?",
+    "db": "apartment_rentals",
+    "table": "apartment_bookings",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different types of media available in the database?",
+    "db": "chinook_1",
+    "table": "mediatype",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What is the list of all students in the database?",
+    "db": "allergy_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 특정 ID를 가진 매치를 찾으려면 어떻게 해야 하나요?",
+    "db": "aircraft",
+    "table": "match",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 엔지니어의 방문 기록은 어떻게 되나요?",
+    "db": "assets_maintenance",
+    "table": "engineer_visits",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers of all ships in the database?",
+    "db": "battle_death",
+    "table": "ship",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique identifiers for all home games?",
+    "db": "baseball_1",
+    "table": "home_game",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 참가하는 사람의 ID는 무엇인가요?",
+    "db": "activity_1",
+    "table": "participates_in",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers for each club in the database?",
+    "db": "club_1",
+    "table": "club",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "공원의ID에 따라 각각의 공원의 세부정보를 조회할 수 있나요?",
+    "db": "baseball_1",
+    "table": "park",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 모든 역의 ID를 나열해 주세요.",
+    "db": "bike_1",
+    "table": "station",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the available stations in the database?",
+    "db": "bike_1",
+    "table": "station",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 결함이 있는 부품의 ID는 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "part_faults",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 있는 모든 대학의 ID는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "college",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 산의 ID를 알고 싶다면, 그 산의 이름은 무엇인가요?",
+    "db": "climbing",
+    "table": "mountain",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "유지보수 엔지니어의 총 수는 몇 명입니까?",
+    "db": "assets_maintenance",
+    "table": "maintenance_engineers",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 결함 로그 부품의 ID에 대한 세부 정보를 어떻게 확인할 수 있나요?",
+    "db": "assets_maintenance",
+    "table": "fault_log_parts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "올스타 선수 리스트에서 특정 선수를 찾을 수 있는 방법은 무엇인가요?",
+    "db": "baseball_1",
+    "table": "all_star",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "학생의 ID는 무엇인가요?",
+    "db": "allergy_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different temperature records stored in the database?",
+    "db": "city_record",
+    "table": "temperature",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique salary IDs in the database?",
+    "db": "baseball_1",
+    "table": "salary",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에는 몇 명의 사람들이 등록되어 있나요?",
+    "db": "candidate_poll",
+    "table": "people",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 있는 아파트 건물의 전체 목록을 알고 싶어요.",
+    "db": "apartment_rentals",
+    "table": "apartment_buildings",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 차량 ID에 대한 상세 정보를 어떻게 찾을 수 있나요?",
+    "db": "car_1",
+    "table": "cars_data",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the available body builder techniques listed in the database?",
+    "db": "body_builder",
+    "table": "body_builder",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 발생한 행동 사건의 ID 목록은 무엇입니까?",
+    "db": "behavior_monitoring",
+    "table": "behavior_incident",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all web client accelerators in the database?",
+    "db": "browser_web",
+    "table": "web_client_accelerator",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all the students in the database?",
+    "db": "club_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "어떤 도시에 호스팅 서비스가 제공되고 있습니까?",
+    "db": "city_record",
+    "table": "hosting_city",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the details of all apartment bookings?",
+    "db": "apartment_rentals",
+    "table": "apartment_bookings",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 사용되는 항공기의 종류는 무엇인가요?",
+    "db": "aircraft",
+    "table": "airport_aircraft",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "가속기 호환 브라우저 목록은 무엇입니까?",
+    "db": "browser_web",
+    "table": "accelerator_compatible_browser",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all the films in the database?",
+    "db": "cinema",
+    "table": "film",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 자산 부품의 ID는 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "asset_parts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 모델의 ID는 어떻게 되나요?",
+    "db": "car_1",
+    "table": "model_list",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all students in the database?",
+    "db": "behavior_monitoring",
+    "table": "students",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all apartment buildings in the database?",
+    "db": "apartment_rentals",
+    "table": "apartment_buildings",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all members in the club?",
+    "db": "club_1",
+    "table": "member_of_club",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the different car names available in the database?",
+    "db": "car_1",
+    "table": "car_names",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What is the unique identifier for each match?",
+    "db": "aircraft",
+    "table": "match",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "구금 기록의 총 개수는 얼마인가요?",
+    "db": "behavior_monitoring",
+    "table": "detention",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers for all colleges in the database?",
+    "db": "baseball_1",
+    "table": "college",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the names of all the continents?",
+    "db": "car_1",
+    "table": "continents",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 테이블에서 수용 유형의 모든 ID를 조회할 수 있나요?",
+    "db": "behavior_monitoring",
+    "table": "ref_detention_type",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 저장된 제3자 회사의 이름은 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "third_party_companies",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different team franchises available in the database?",
+    "db": "baseball_1",
+    "table": "team_franchise",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the details of all behavior incidents recorded in the database?",
+    "db": "behavior_monitoring",
+    "table": "behavior_incident",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "앨범의 수는 몇 개인가요?",
+    "db": "chinook_1",
+    "table": "album",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 멤버가 명예의 전당에 있는지 확인할 수 있나요?",
+    "db": "baseball_1",
+    "table": "hall_of_fame",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 자동차 제조사의 ID는 무엇인가요?",
+    "db": "car_1",
+    "table": "car_makers",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the available parts in the inventory?",
+    "db": "assets_maintenance",
+    "table": "parts",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all employees in the database?",
+    "db": "chinook_1",
+    "table": "employee",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 나라의 ID는 무엇인가요?",
+    "db": "car_1",
+    "table": "countries",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "아이디가 \"abc123\"인 일정의 세부정보는 어떻게 되나요?",
+    "db": "cinema",
+    "table": "schedule",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What skills are available in the database?",
+    "db": "assets_maintenance",
+    "table": "skills",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What is the unique identifier for each weather record in the database?",
+    "db": "bike_1",
+    "table": "weather",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 행동 사건의 ID가 존재하는지 확인할 수 있습니까?",
+    "db": "behavior_monitoring",
+    "table": "behavior_incident",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 다리의 정보를 조회할 수 있나요?",
+    "db": "architecture",
+    "table": "bridge",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 직원의 정보를 조회할 수 있는 방법은 무엇인가요?",
+    "db": "chinook_1",
+    "table": "employee",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "지난 주에 발생한 결함 로그의 수는 몇 건인가요?",
+    "db": "assets_maintenance",
+    "table": "fault_log",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different browser IDs available in the database?",
+    "db": "browser_web",
+    "table": "browser",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the different hosting cities available in the database?",
+    "db": "city_record",
+    "table": "hosting_city",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all the teachers in the database?",
+    "db": "behavior_monitoring",
+    "table": "teachers",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 시점의 온도 데이터를 찾을 수 있는 방법은 무엇인가요?",
+    "db": "city_record",
+    "table": "temperature",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different types of allergies listed in the database?",
+    "db": "allergy_1",
+    "table": "allergy_type",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 어떤 선박의 ID를 확인할 수 있나요?",
+    "db": "battle_death",
+    "table": "ship",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique IDs of all the guests in the database?",
+    "db": "apartment_rentals",
+    "table": "guests",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 클럽의 모든 ID는 무엇인가요?",
+    "db": "club_1",
+    "table": "club",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What types of companies are stored in the database?",
+    "db": "assets_maintenance",
+    "table": "ref_company_types",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 팀의 총 개수는 몇 개인가요?",
+    "db": "baseball_1",
+    "table": "team",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 멤버가 클럽에 가입했는지 확인할 수 있습니까?",
+    "db": "club_1",
+    "table": "member_of_club",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 사용 가능한 부품의 ID는 무엇입니까?",
+    "db": "assets_maintenance",
+    "table": "parts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 활동의 ID는 무엇인가요?",
+    "db": "activity_1",
+    "table": "activity",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 특정 회사 유형의 ID는 무엇인가요?",
+    "db": "assets_maintenance",
+    "table": "ref_company_types",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the different types of part faults recorded in the database?",
+    "db": "assets_maintenance",
+    "table": "part_faults",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 ID를 가진 사람은 알레르기가 있나요?",
+    "db": "allergy_1",
+    "table": "has_allergy",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the names of all the artists in the database?",
+    "db": "chinook_1",
+    "table": "artist",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 단위의 상태를 조회하려면 어떤 정보를 제공해야 하나요?",
+    "db": "apartment_rentals",
+    "table": "view_unit_status",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique city IDs present in the database?",
+    "db": "city_record",
+    "table": "city",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique battle IDs in the database?",
+    "db": "battle_death",
+    "table": "battle",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 ID에 대한 도시의 이름을 알려줄 수 있나요?",
+    "db": "city_record",
+    "table": "city",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What skills are associated with the engineers in the database?",
+    "db": "assets_maintenance",
+    "table": "engineer_skills",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 차의 이름을 모두 나열해 줄 수 있나요?",
+    "db": "car_1",
+    "table": "car_names",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique identifiers for each asset part in the database?",
+    "db": "assets_maintenance",
+    "table": "asset_parts",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique identifiers for each book in the database?",
+    "db": "book_2",
+    "table": "book",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the names of all third-party companies listed in the database?",
+    "db": "assets_maintenance",
+    "table": "third_party_companies",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 조종사의 정보를 조회할 수 있나요?",
+    "db": "aircraft",
+    "table": "pilot",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 평가 노트는 어떤 주제에 대한 내용을 다루고 있나요?",
+    "db": "behavior_monitoring",
+    "table": "assessment_notes",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all the architects in the database?",
+    "db": "architecture",
+    "table": "architect",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "클라이머의 총 수는 몇 명인가요?",
+    "db": "climbing",
+    "table": "climber",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 플레이어의 ID는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "player",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "결함이 발생한 부품이 몇 개인지 알 수 있나요?",
+    "db": "assets_maintenance",
+    "table": "part_faults",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 대학의 ID를 주면, 해당 대학의 이름을 알 수 있나요?",
+    "db": "baseball_1",
+    "table": "college",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 제공하는 모델의 목록은 무엇인가요?",
+    "db": "car_1",
+    "table": "model_list",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of the participants in the event?",
+    "db": "activity_1",
+    "table": "participates_in",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 가장 높은 산의 ID는 무엇인가요?",
+    "db": "climbing",
+    "table": "mountain",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "장르의 ID가 무엇인지 확인할 수 있나요?",
+    "db": "chinook_1",
+    "table": "genre",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the available facilities in the apartments?",
+    "db": "apartment_rentals",
+    "table": "apartment_facilities",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 선박의 ID를 기반으로 해당 선박 정보를 가져올 수 있나요?",
+    "db": "battle_death",
+    "table": "ship",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 출판물의 정보를 확인하려면 어떻게 해야 하나요?",
+    "db": "book_2",
+    "table": "publication",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the ids of all the players who have made the All-Star team?",
+    "db": "baseball_1",
+    "table": "all_star",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 평가 노트의 내용은 어떻게 확인할 수 있나요?",
+    "db": "behavior_monitoring",
+    "table": "assessment_notes",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 특정 경기의 ID는 무엇인가요?",
+    "db": "city_record",
+    "table": "match",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "학생의 주소는 무엇입니까?",
+    "db": "behavior_monitoring",
+    "table": "student_addresses",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all students in the database?",
+    "db": "behavior_monitoring",
+    "table": "student_addresses",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "현재 시스템에서 모든 단위의 상태 정보를 확인할 수 있는 방법은 무엇인가요?",
+    "db": "apartment_rentals",
+    "table": "view_unit_status",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 어떤 장르들이 있는지 알고 싶습니다.",
+    "db": "chinook_1",
+    "table": "genre",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 건축가의 정보를 알려줄 수 있습니까?",
+    "db": "architecture",
+    "table": "architect",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 책은 어떤 제목인가요?",
+    "db": "book_2",
+    "table": "book",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 트랙의 ID가 무엇인지를 알려줄 수 있나요?",
+    "db": "chinook_1",
+    "table": "track",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 자산 부품의 총 개수는 몇 개인가요?",
+    "db": "assets_maintenance",
+    "table": "asset_parts",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 각 클라이머의 ID는 무엇인가요?",
+    "db": "climbing",
+    "table": "climber",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What is the unique identifier for each customer in the database?",
+    "db": "chinook_1",
+    "table": "customer",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "교수의 ID 목록은 무엇인가요?",
+    "db": "activity_1",
+    "table": "faculty",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 어떤 사람들의 알레르기 정보가 저장되어 있나요?",
+    "db": "allergy_1",
+    "table": "has_allergy",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 있는 청구서의 총 수는 몇 건인가요?",
+    "db": "chinook_1",
+    "table": "invoice",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 공항의 ID가 가장 많은 비행기를 운항하고 있나요?",
+    "db": "aircraft",
+    "table": "airport",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 프랜차이즈 ID에 해당하는 팀의 정보는 어떻게 확인할 수 있나요?",
+    "db": "baseball_1",
+    "table": "team_franchise",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 결함 로그의 ID가 무엇인지 확인할 수 있나요?",
+    "db": "assets_maintenance",
+    "table": "fault_log",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 저장된 아파트의 총 개수는 몇 개인가요?",
+    "db": "apartment_rentals",
+    "table": "apartments",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "후보자의 ID는 무엇입니까?",
+    "db": "candidate_poll",
+    "table": "candidate",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the unique car IDs in the cars_data table?",
+    "db": "car_1",
+    "table": "cars_data",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "어떤 자동차 제조사들이 데이터베이스에 등록되어 있나요?",
+    "db": "car_1",
+    "table": "car_makers",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What is the unique identifier for each mill in the database?",
+    "db": "architecture",
+    "table": "mill",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "최근 홈 게임의 ID는 무엇인가요?",
+    "db": "baseball_1",
+    "table": "home_game",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of all publications in the database?",
+    "db": "book_2",
+    "table": "publication",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "이 데이터베이스에서 영화의 ID는 무엇입니까?",
+    "db": "cinema",
+    "table": "film",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이번 주에 구금된 학생은 몇 명인가요?",
+    "db": "behavior_monitoring",
+    "table": "students_in_detention",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "Who are the staff members in the database?",
+    "db": "assets_maintenance",
+    "table": "staff",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the available apartment IDs in the database?",
+    "db": "apartment_rentals",
+    "table": "apartments",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all engineer visits in the database?",
+    "db": "assets_maintenance",
+    "table": "engineer_visits",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "선수 수상 목록에서 특정 선수를 찾을 수 있나요?",
+    "db": "baseball_1",
+    "table": "player_award",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 다리의 ID는 무엇인가요?",
+    "db": "architecture",
+    "table": "bridge",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "학생의 ID는 무엇인가요?",
+    "db": "club_1",
+    "table": "student",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 선수들이 수상을 받았나요?",
+    "db": "baseball_1",
+    "table": "player_award",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 대학의 선수들은 몇 명이 등록되어 있습니까?",
+    "db": "baseball_1",
+    "table": "player_college",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the IDs of individuals who have an allergy?",
+    "db": "allergy_1",
+    "table": "has_allergy",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the IDs of all individuals in the hall of fame?",
+    "db": "baseball_1",
+    "table": "hall_of_fame",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "What are the unique identifiers for the mountains in the database?",
+    "db": "climbing",
+    "table": "mountain",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "특정 전투의 정보를 검색할 수 있습니까?",
+    "db": "battle_death",
+    "table": "battle",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "What are the available schedule IDs in the database?",
+    "db": "cinema",
+    "table": "schedule",
+    "source": "llm",
+    "lang": "en"
+  },
+  {
+    "question": "전체 자산 목록은 어떻게 되나요?",
+    "db": "assets_maintenance",
+    "table": "assets",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "오늘의 날씨 정보는 무엇인가요?",
+    "db": "bike_1",
+    "table": "weather",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "엔지니어 방문의 총 횟수는 얼마인가요?",
+    "db": "assets_maintenance",
+    "table": "engineer_visits",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "어떤 대학 출신의 선수들이 데이터베이스에 기록되어 있나요?",
+    "db": "baseball_1",
+    "table": "player_college",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에서 상태의 수가 얼마인지 알고 싶습니다.",
+    "db": "bike_1",
+    "table": "status",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "이 데이터베이스에 저장된 미디어 타입의 목록은 무엇인가요?",
+    "db": "chinook_1",
+    "table": "mediatype",
+    "source": "llm",
+    "lang": "ko"
+  },
+  {
+    "question": "특정 ID를 가진 사람의 정보는 무엇인가요?",
+    "db": "candidate_poll",
+    "table": "people",
+    "source": "llm",
+    "lang": "ko"
+  }
+]
