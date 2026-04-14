@@ -1,4 +1,6 @@
+from .dsi_reranker import DSIRerankerModel, DSITrainingStats
 from .execution_log import ExecutionLogger
+from .gnn_node_scorer import GraphTrainingStats, LocalGraphNodeScorer
 from .models import (
     CandidateSubgraph,
     ExecutionFeedback,
@@ -14,10 +16,14 @@ from .table_index import TableIndexRetriever
 
 __all__ = [
     "CandidateSubgraph",
+    "DSIRerankerModel",
+    "DSITrainingStats",
     "ExecutionFeedback",
     "ExecutionLogger",
     "GraphEdge",
+    "GraphTrainingStats",
     "IndexGraphPruningPipeline",
+    "LocalGraphNodeScorer",
     "RetrievalBudget",
     "RetrievalPlan",
     "TableCandidate",

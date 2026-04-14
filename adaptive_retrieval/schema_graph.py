@@ -173,6 +173,33 @@ class TableSchemaGraph:
 
         return []
 
+    def expand_from_seeds(
+        self,
+        db_name: str,
+        seed_tables: list[str],
+        max_hops: int = 2,
+    ) -> set[str]:
+        prefix = f"{db_name.lower()}."
+        queue: deque[tuple[str, int]] = deque(
+            (self._fqn(db_name, table), 0) for table in seed_tables
+        )
+        visited = {
+            self._fqn(db_name, table)
+            for table in seed_tables
+        }
+
+        while queue:
+            node, depth = queue.popleft()
+            if depth >= max_hops:
+                continue
+            for neighbor in self._adjacency.get(node, {}):
+                if not neighbor.startswith(prefix) or neighbor in visited:
+                    continue
+                visited.add(neighbor)
+                queue.append((neighbor, depth + 1))
+
+        return {node.split(".", 1)[1] for node in visited}
+
     def subgraph_edges(self, db_name: str, tables: set[str]) -> list[GraphEdge]:
         edges: list[GraphEdge] = []
         seen_pairs: set[tuple[str, str]] = set()

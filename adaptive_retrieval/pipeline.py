@@ -39,21 +39,87 @@ class IndexGraphPruningPipeline:
     ) -> RetrievalPlan:
         budget = budget or RetrievalBudget()
         index_candidates = self._table_index.search(query, top_k=budget.top_k)
-        candidate_subgraphs = self._build_candidate_subgraphs(
+        return self.retrieve_with_candidates(
+            query=query,
+            index_candidates=index_candidates,
+            budget=budget,
+            query_type=query_type,
+            gold_tables=gold_tables,
+            note="Index candidates pruned with the schema graph.",
+        )
+
+    def retrieve_index_only(
+        self,
+        query: str,
+        budget: RetrievalBudget | None = None,
+        query_type: str = "",
+        gold_tables: list[str] | None = None,
+    ) -> RetrievalPlan:
+        budget = budget or RetrievalBudget()
+        index_candidates = self._table_index.search(query, top_k=budget.top_k)
+        return self.plan_from_subgraphs(
+            query=query,
+            index_candidates=index_candidates,
+            candidate_subgraphs=[],
+            budget=budget,
+            query_type=query_type,
+            gold_tables=gold_tables,
+            note="Index only baseline. No graph pruning applied.",
+        )
+
+    def retrieve_with_candidates(
+        self,
+        query: str,
+        index_candidates: list[TableCandidate],
+        budget: RetrievalBudget | None = None,
+        query_type: str = "",
+        gold_tables: list[str] | None = None,
+        note: str = "",
+    ) -> RetrievalPlan:
+        budget = budget or RetrievalBudget()
+        candidate_subgraphs = self.build_candidate_subgraphs(
             index_candidates=index_candidates,
             budget=budget,
         )
+        return self.plan_from_subgraphs(
+            query=query,
+            index_candidates=index_candidates,
+            candidate_subgraphs=candidate_subgraphs,
+            budget=budget,
+            query_type=query_type,
+            gold_tables=gold_tables,
+            note=note or "Index candidates pruned with the schema graph.",
+        )
+
+    def plan_from_subgraphs(
+        self,
+        query: str,
+        index_candidates: list[TableCandidate],
+        candidate_subgraphs: list[CandidateSubgraph],
+        budget: RetrievalBudget | None = None,
+        query_type: str = "",
+        gold_tables: list[str] | None = None,
+        note: str = "",
+    ) -> RetrievalPlan:
+        budget = budget or RetrievalBudget()
         selected = candidate_subgraphs[0] if candidate_subgraphs else None
-        inspection_order = self._inspection_order(selected)
+        inspection_order = (
+            [candidate.fqn for candidate in index_candidates]
+            if not candidate_subgraphs
+            else self._inspection_order(selected)
+        )
 
         notes: list[str] = []
         if not index_candidates:
             notes.append("No table candidates returned from index.")
+        elif selected is None and candidate_subgraphs:
+            notes.append("Candidate subgraphs were produced, but none survived scoring.")
         elif selected is None:
-            notes.append("Index returned candidates, but graph pruning found no connected subgraph.")
+            notes.append(note or "Index only baseline. No graph pruning applied.")
         else:
             notes.append(
-                "Inspect seed tables first, then expand only within the retained connected subgraph."
+                note
+                or "Inspect seed tables first, then expand only within the retained connected subgraph."
             )
 
         plan = RetrievalPlan(
@@ -72,7 +138,7 @@ class IndexGraphPruningPipeline:
 
         return plan
 
-    def _build_candidate_subgraphs(
+    def build_candidate_subgraphs(
         self,
         index_candidates: list[TableCandidate],
         budget: RetrievalBudget,

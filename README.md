@@ -21,6 +21,8 @@ This project implements and benchmarks the following retrieval approaches:
 | Method | Core Idea |
 |--------|-----------|
 | `Index + Graph Pruning` | Rich table index -> top-k candidates -> schema-graph pruning -> small local subgraph |
+| `Index + Graph + DSI` | Index candidates -> trainable DSI-style reranker -> schema-graph pruning |
+| `Index + Graph + GNN` | Graph-pruned local subgraphs -> trainable GNN node scorer -> final retained subgraph |
 | `SchemaRAG` | Pure embedding similarity over schema text |
 | `GraphRAG` | Neo4j access graph + FAISS query history + community coverage |
 | `GraphRAG Tiered` | Confidence-based lookup reduction on top of GraphRAG |
@@ -314,6 +316,28 @@ This flow returns:
 - MCP inspection order
 - a JSONL execution log path for later DSI / GNN supervision
 
+### Trainable DSI / GNN Retrieval
+
+Train the reranker:
+
+```bash
+python train_dsi_reranker.py --dataset spider --top_k 8 --max_hops 2 --output models/adaptive_retrieval/dsi_spider.pkl
+```
+
+Train the node scorer:
+
+```bash
+python train_gnn_node_scorer.py --dataset spider --top_k 8 --max_hops 2 --epochs 10 --output models/adaptive_retrieval/gnn_spider.pt
+```
+
+Run one query through the practical retrieval stack:
+
+```bash
+python run_adaptive_retrieval.py --dataset spider --query "recent repeat-purchase customer patterns" --strategy graph
+python run_adaptive_retrieval.py --dataset spider --query "recent repeat-purchase customer patterns" --strategy dsi --dsi_model models/adaptive_retrieval/dsi_spider.pkl
+python run_adaptive_retrieval.py --dataset spider --query "recent repeat-purchase customer patterns" --strategy gnn --gnn_model models/adaptive_retrieval/gnn_spider.pt
+```
+
 ### API
 
 Run the API:
@@ -370,6 +394,7 @@ Example `POST /retrieve/subgraph` payload:
 python benchmark_v2.py --datasets spider
 python compare_models.py --finetuned models/finetuned_spider_full/final
 python benchmark_index_graph.py --dataset spider --max_samples 200 --top_k 8 --max_hops 2
+python benchmark_adaptive_retrieval.py --dataset spider --max_samples 200 --top_k 8 --max_hops 2 --dsi_model models/adaptive_retrieval/dsi_spider.pkl --gnn_model models/adaptive_retrieval/gnn_spider.pt
 ```
 
 Note:
@@ -381,6 +406,15 @@ Note:
 - `Index + Graph Pruning`
 
 It reports table-set metrics such as average gold-table recall, full coverage rate, average inspected tables, average unnecessary tables, and average latency.
+
+`benchmark_adaptive_retrieval.py` extends that comparison to:
+
+- `IndexOnly`
+- `Index + Graph Pruning`
+- `Index + Graph + DSI`
+- `Index + Graph + GNN`
+
+This is the recommended A/B/C/D benchmark for the practical retrieval roadmap.
 
 ### Fine-Tuning
 
@@ -401,17 +435,24 @@ graphrag/
   benchmark.py
   benchmark_v2.py
   benchmark_index_graph.py
+  benchmark_adaptive_retrieval.py
   compare_models.py
   finetune.py
   init_db.py
   query_generator.py
+  run_adaptive_retrieval.py
   trainer.py
+  train_dsi_reranker.py
+  train_gnn_node_scorer.py
   adaptive_retrieval/
+    dsi_reranker.py
+    experiment_utils.py
     models.py
     table_index.py
     schema_graph.py
     pipeline.py
     execution_log.py
+    gnn_node_scorer.py
   embedding/
     embedder.py
     faiss_index.py
