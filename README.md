@@ -1,72 +1,144 @@
 # Schema Router
 
-Natural language question → correct database table, powered by **GraphRAG + Sentence-Transformer fine-tuning**.
+Natural-language query routing and schema planning for large database collections, powered by GraphRAG, a three-stage router, and a multi-hop schema planner.
 
-Given a question like *"How many orders were placed last month?"*, Schema Router identifies the target table (`orders`) across 160+ databases without writing a single SQL query first.
+This project started as a `question -> correct table` router for NL-to-SQL. It now also supports `question -> entry tables + candidate traversal paths + stop conditions`, which is useful when the answer is spread across multiple related tables and the goal is to reduce unnecessary MCP / DB lookups.
 
 ---
 
 ## Overview
 
-Schema routing is the first step in any NL-to-SQL pipeline. Before an LLM can write SQL, it needs to know *which table* to query. Naive approaches embed all schema descriptions and do cosine similarity — this works but degrades as the number of tables grows.
+The codebase currently has two complementary outputs:
 
-This project implements and benchmarks four increasingly sophisticated approaches:
+1. `Routing`
+   Returns ranked `(db, table)` candidates for classic schema routing.
+2. `Planning`
+   Returns a budget-aware multi-hop schema traversal plan with:
+   `intent`, `entities`, `required_facts`, `entrypoints`, `candidate_paths`, `execution_steps`, and `stop_condition`.
+
+This project implements and benchmarks the following retrieval approaches:
 
 | Method | Core Idea |
 |--------|-----------|
-| **SchemaRAG** | Pure embedding similarity (FAISS). Baseline. |
-| **GraphRAG** | Neo4j access graph + community detection + FAISS history |
-| **GraphRAG Tiered** | GraphRAG with confidence-based fallback to SchemaRAG |
-| **ThreeStage** | Cache → Graph-RAG → DSI Re-ranker pipeline |
+| `SchemaRAG` | Pure embedding similarity over schema text |
+| `GraphRAG` | Neo4j access graph + FAISS query history + community coverage |
+| `GraphRAG Tiered` | Confidence-based lookup reduction on top of GraphRAG |
+| `ThreeStage` | Similarity cache -> GraphRAG -> DSI-style reranker |
+| `Schema Planner` | Query understanding -> candidate entrypoints -> graph-constrained multi-hop path planning |
 
-On top of these, the embedding model itself is fine-tuned on (question, schema) pairs using `MultipleNegativesRankingLoss`.
+The embedding model can also be fine-tuned on `(question, schema)` pairs using `MultipleNegativesRankingLoss`.
 
 ---
 
 ## Architecture
 
-```
+### 1. Single-Table Routing
+
+```text
 NL Question
-    │
-    ▼
-┌─────────────────────────────────────────────┐
-│ Stage 1: Similarity Cache                   │
-│   cosine_sim > 0.92?                        │
-│   YES → return cached (db, table) instantly │
-│   NO  → Stage 2                             │
-└─────────────────────────────────────────────┘
-    │ Cache MISS
-    ▼
-┌─────────────────────────────────────────────┐
-│ Stage 2: Graph-RAG                          │
-│   Question node → Neo4j BFS (1~2 hop)      │
-│   757 tables → top-20 candidates            │
-└─────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────┐
-│ Stage 3: DSI Re-ranker                      │
-│   Embedding similarity   (55%)              │
-│   Column keyword overlap (30%)              │
-│   FK / JOIN richness     (15%)              │
-│   → top-1 schema + store in Stage 1 cache  │
-└─────────────────────────────────────────────┘
-    │
-    ▼
-LLM → SQL Generation
+  -> Stage 1: Similarity Cache
+  -> Stage 2: GraphRAG Retrieval
+  -> Stage 3: DSI-style Re-ranking
+  -> Top ranked (db, table)
 ```
 
-**Feedback loop**: SQL execution success/failure updates cache confidence and graph edge weights.
+This is still the default path for classic routing benchmarks.
+
+### 2. Multi-Hop Schema Planning
+
+```text
+NL Question
+  -> Query Understanding
+     - intent
+     - entities
+     - required facts
+     - constraints
+  -> Schema Scoring
+     - lexical overlap
+     - fact / entity overlap
+     - join richness
+     - historical GraphRAG priors
+  -> Candidate Entrypoints
+  -> Multi-Hop Path Expansion
+     - join-connected neighbors only
+     - budget-aware search
+     - fact coverage scoring
+  -> Execution Steps
+     - probe entrypoints
+     - expand path if needed
+     - try alternative branch if needed
+     - aggregate evidence
+```
+
+The planner is designed for questions where the answer is not stored in one table, but must be assembled from several related tables with minimal exploration cost.
+
+---
+
+## Why The Planner Exists
+
+Classic schema routing solves:
+
+`question -> which table is most likely correct?`
+
+The planner targets a harder problem:
+
+`question -> which tables and traversal path should we inspect, in what order, under a fixed lookup budget?`
+
+This is useful when:
+
+- The answer is distributed across multiple tables
+- MCP explores schemas iteratively
+- The main objective is not only correctness but also lookup efficiency
+- You want explicit stop conditions instead of open-ended schema exploration
+
+---
+
+## Current Planner Output
+
+`QueryRouter.plan()` and `POST /plan` return a structure like:
+
+```json
+{
+  "query": "What common patterns do high repurchase customers show?",
+  "intent": "customer_order_purchase_count_campaign_response",
+  "entities": ["customer", "order", "campaign"],
+  "required_facts": ["purchase_count", "campaign_response", "pattern"],
+  "entrypoints": [
+    {
+      "db": "ecommerce",
+      "table": "order_items",
+      "score": 0.2667
+    }
+  ],
+  "candidate_paths": [
+    {
+      "path_id": "path_1",
+      "db": "ecommerce",
+      "tables": ["order_items", "orders", "customers", "campaign_events"],
+      "coverage": 0.75,
+      "estimated_cost": 4
+    }
+  ],
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "probe_entrypoints",
+      "targets": ["ecommerce.order_items", "ecommerce.orders"]
+    }
+  ],
+  "stop_condition": "Stop when fact coverage is high enough..."
+}
+```
 
 ---
 
 ## Fine-Tuning
 
-The sentence-transformer embedding model is fine-tuned on Spider training data using **MultipleNegativesRankingLoss** (bi-encoder):
+The sentence-transformer embedding model is fine-tuned on Spider training data using **MultipleNegativesRankingLoss**.
 
-- No explicit negative samples needed — other pairs in the same batch act as negatives
-- Training pair format: `{"anchor": question, "positive": "table_name: col1 col2 — description"}`
-- Also supports reverse-generated queries (DBCopilot §3.3 style): schema → LLM → synthetic question
+- No explicit negative samples are needed
+- Training pairs follow the shape `{"anchor": question, "positive": "table_name: col1 col2 description"}`
+- Reverse-generated queries are also supported for synthetic supervision
 
 ```bash
 # Basic: 3000 samples, 3 epochs
@@ -76,7 +148,9 @@ python finetune.py --n_samples 3000 --epochs 3
 python finetune.py --epochs 5 --use_generated --output models/finetuned_spider_full
 ```
 
-### Fine-Tuning Results (Spider dev, 1034 questions)
+### Fine-Tuning Results
+
+Spider dev, 1034 questions:
 
 | Model | hit@1 | hit@3 | MRR | avg_lookup |
 |-------|-------|-------|-----|------------|
@@ -84,34 +158,34 @@ python finetune.py --epochs 5 --use_generated --output models/finetuned_spider_f
 | Fine-tuned (3k samples, 3 ep) | 53.3% | 73.0% | 0.6525 | 7.8 |
 | **Fine-tuned (full + generated, 5 ep)** | **56.0%** | **77.9%** | **0.6846** | **6.7** |
 
-- **hit@1 +8.1%p** with full fine-tuning vs base model
-- **avg_lookup drops from 7.3 → 6.7**: fewer tables inspected before finding the correct one
+- `hit@1 +8.1%p` with full fine-tuning vs base model
+- `avg_lookup` drops from `7.3` to `6.7`
 - Training time: ~2 min on CPU (7000+ pairs, 5 epochs)
 
-> **Key insight**: As more (question, table) pairs accumulate, the embedding space learns domain-specific alignment. New questions require fewer lookups and are routed more accurately — this is the core learning loop.
+> As more `(question, table)` pairs accumulate, the embedding space learns domain-specific alignment. New questions require fewer lookups and are routed more accurately.
 
 ---
 
 ## Reverse Query Generation
 
-To augment training data without manual annotation, queries are auto-generated from schemas (DBCopilot §3.3):
+To augment training data without manual annotation, queries can be generated from schemas:
 
-```
-Schema → LLM → "What are the top 10 best-selling products this month?"
-               + ground truth: db=ecommerce, table=order_items
+```text
+Schema -> LLM -> "What are the top 10 best-selling products this month?"
+         + ground truth: db=ecommerce, table=order_items
 ```
 
-Three generation strategies:
-1. **Single-table**: one table at a time, Korean + English
-2. **Multi-table (JOIN)**: pairs of tables with FK relationships
-3. **Template fallback**: rule-based if no API key available
+Generation strategies:
+
+1. `Single-table`: one table at a time, Korean + English
+2. `Multi-table`: pairs of tables with FK relationships
+3. `Template fallback`: rule-based generation without an API key
 
 ```bash
-# Generate queries for first N databases
 python query_generator.py --n_dbs 20
 ```
 
-Generated data is saved to `data/generated_queries.json` (306 queries included).
+Generated data is saved to `data/generated_queries.json`.
 
 ---
 
@@ -142,11 +216,11 @@ ANTHROPIC_API_KEY=sk-ant-...   # fallback (optional)
 python bench_datasets/download_spider.py
 ```
 
-Or manually download from [Yale Spider](https://yale-lily.github.io/spider) and place under `bench_datasets/spider/`.
+Or manually download from [Yale Spider](https://yale-lily.github.io/spider) and place it under `bench_datasets/spider/`.
 
 ### Neo4j
 
-Start a local Neo4j instance (Desktop or Docker), then initialize the schema graph:
+Start a local Neo4j instance, then initialize the schema graph:
 
 ```bash
 python init_db.py
@@ -156,25 +230,77 @@ python init_db.py
 
 ## Usage
 
-### Schema Routing (single question)
+### Schema Routing
 
 ```python
 from router import QueryRouter
 
-router = QueryRouter()
-result = router.route("How many customers signed up last month?")
-print(result.top_db, result.top_table)
+router = QueryRouter.build()
+paths = router.route("How many customers signed up last month?", top_n=3)
+
+for path in paths:
+    print(path.db, path.table, path.score)
+```
+
+### Multi-Hop Schema Planning
+
+```python
+from router import QueryRouter
+
+router = QueryRouter.build()
+
+plan = router.plan(
+    "Show common patterns among high repurchase customers by category overlap and campaign response",
+    max_hops=3,
+    max_tables=5,
+    max_mcp_calls=4,
+)
+
+print(plan.to_dict())
+```
+
+### API
+
+Run the API:
+
+```bash
+uvicorn api:app --reload --host 0.0.0.0 --port 8000
+```
+
+Available endpoints:
+
+- `POST /route`
+- `POST /explain`
+- `POST /plan`
+- `POST /record`
+- `POST /schemas`
+- `POST /rebuild`
+- `POST /train/decay`
+- `GET /train/report`
+- `GET /health`
+
+Example `POST /plan` payload:
+
+```json
+{
+  "query": "재구매가 높은 고객군의 공통 패턴을 카테고리와 캠페인 반응 기준으로 보고 싶어",
+  "max_hops": 3,
+  "max_tables": 5,
+  "max_entrypoints": 3,
+  "max_candidate_paths": 3,
+  "max_mcp_calls": 4
+}
 ```
 
 ### Benchmark
 
 ```bash
-# Full benchmark: SchemaRAG / GraphRAG / ThreeStage
 python benchmark_v2.py --datasets spider
-
-# Compare base vs fine-tuned (no Neo4j needed)
 python compare_models.py --finetuned models/finetuned_spider_full/final
 ```
+
+Note:
+`benchmark_v2.py` is still centered on single-table routing metrics such as `hit@1` and `MRR`. The planner is implemented and callable, but planner-specific evaluation metrics are not yet integrated into the benchmark suite.
 
 ### Fine-Tuning
 
@@ -186,53 +312,70 @@ python finetune.py --epochs 5 --use_generated
 
 ## Project Structure
 
-```
-schema-router/
-├── config.py                  # Model name, Neo4j URI, thresholds
-├── router.py                  # Main QueryRouter entry point
-├── baseline_rag.py            # SchemaRAG baseline (FAISS only)
-├── finetune.py                # Sentence-transformer fine-tuning
-├── compare_models.py          # Base vs fine-tuned evaluation
-├── benchmark_v2.py            # Full benchmark suite
-├── query_generator.py         # Reverse query generation (DBCopilot §3.3)
-│
-├── embedding/
-│   ├── embedder.py            # SentenceTransformer wrapper + singleton
-│   └── faiss_index.py         # FAISS index helpers
-│
-├── graph_rag/
-│   ├── indexer.py             # Schema → Neo4j ingestion
-│   ├── retriever.py           # Graph BFS retriever
-│   ├── community.py           # Leiden community detection
-│   └── tiered_retriever.py    # Confidence-tiered retriever
-│
-├── three_stage/
-│   ├── stage1_cache.py        # Similarity cache (FAISS + threshold)
-│   ├── stage3_reranker.py     # DSI re-ranker (embed + keyword + struct)
-│   └── pipeline.py            # ThreeStagePipeline orchestrator
-│
-├── graph_db/
-│   └── neo4j_client.py        # Neo4j driver wrapper
-│
-├── bench_datasets/
-│   ├── spider_loader.py       # Spider train/dev loader
-│   ├── bird_loader.py         # BIRD benchmark loader
-│   └── base.py                # BenchmarkSample, SchemaEntry types
-│
-└── data/
-    └── generated_queries.json # 306 reverse-generated queries
+```text
+graphrag/
+  config.py
+  router.py
+  api.py
+  baseline_rag.py
+  benchmark.py
+  benchmark_v2.py
+  compare_models.py
+  finetune.py
+  init_db.py
+  query_generator.py
+  trainer.py
+  embedding/
+    embedder.py
+    faiss_index.py
+  graph_db/
+    neo4j_client.py
+  graph_rag/
+    community.py
+    indexer.py
+    keyword_router.py
+    retriever.py
+    tiered_retriever.py
+  planner/
+    __init__.py
+    models.py
+    query_understanding_v2.py
+    schema_planner.py
+  three_stage/
+    pipeline.py
+    stage1_cache.py
+    stage3_reranker.py
+  bench_datasets/
+    base.py
+    spider_loader.py
+    bird_loader.py
+  data/
+    generated_queries.json
 ```
 
 ---
 
 ## Metrics
 
+### Current Benchmark Metrics
+
 | Metric | Description |
 |--------|-------------|
-| **hit@1** | Correct table is ranked #1 |
-| **hit@3** | Correct table is in top 3 |
-| **MRR** | Mean Reciprocal Rank — average of 1/rank |
-| **avg_lookup** | Average rank position of the correct table (lower = better) |
+| `hit@1` | Correct table is ranked first |
+| `hit@3` | Correct table appears in top 3 |
+| `MRR` | Mean reciprocal rank |
+| `avg_lookup` | Average rank position of the correct table |
+| `lookup_reduction` | Relative lookup savings vs baseline |
+
+### Recommended Planner Metrics
+
+The planner introduces a different objective, so these are the next logical evaluation targets:
+
+- `fact_coverage`
+- `path_cost`
+- `unnecessary_tables`
+- `answer_quality`
+- `stop_efficiency`
 
 ---
 

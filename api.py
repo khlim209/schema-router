@@ -96,6 +96,17 @@ class ExplainResponse(BaseModel):
     similar_queries: list[dict]
     ranked_paths: list[dict]
 
+class PlanRequest(BaseModel):
+    query: str = Field(..., description="Natural-language query")
+    max_hops: int = Field(3, description="Maximum join hops to explore")
+    max_tables: int = Field(5, description="Maximum number of tables in one candidate path")
+    max_entrypoints: int = Field(3, description="How many entry tables to prioritize")
+    max_candidate_paths: int = Field(3, description="How many alternative paths to keep")
+    max_mcp_calls: int = Field(4, description="Planner budget for downstream MCP calls")
+
+class PlanResponse(BaseModel):
+    plan: dict[str, Any]
+
 class RecordRequest(BaseModel):
     query_text: str = Field(..., description="Query text")
     db_name:    str = Field(..., description="Database name")
@@ -168,6 +179,21 @@ async def explain(req: RouteRequest):
     router = _get_router()
     info = router.explain(req.query, top_n=req.top_n)
     return ExplainResponse(**info)
+
+
+@app.post("/plan", response_model=PlanResponse)
+async def plan(req: PlanRequest):
+    """Return a budget-aware multi-hop schema traversal plan."""
+    router = _get_router()
+    plan_result = router.plan_dict(
+        query_text=req.query,
+        max_hops=req.max_hops,
+        max_tables=req.max_tables,
+        max_entrypoints=req.max_entrypoints,
+        max_candidate_paths=req.max_candidate_paths,
+        max_mcp_calls=req.max_mcp_calls,
+    )
+    return PlanResponse(plan=plan_result)
 
 
 @app.post("/record", response_model=RecordResponse)

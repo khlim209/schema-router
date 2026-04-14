@@ -31,6 +31,7 @@ from graph_rag.community import CommunityDetector
 from graph_rag.indexer import AccessRecord, GraphIndexer, SchemaDefinition
 from graph_rag.retriever import GraphRetriever, SchemaPath
 from graph_rag.tiered_retriever import TieredResult, TieredRetriever
+from planner import MultiHopSchemaPlanner, PathBudget, SchemaTraversalPlan
 
 
 class QueryRouter:
@@ -53,6 +54,11 @@ class QueryRouter:
         self._community = community
         self._retriever = retriever
         self._tiered    = TieredRetriever(retriever, neo4j, total_tables)
+        self._schema_registry: dict[str, dict[str, dict]] = {}
+        self._planner = MultiHopSchemaPlanner(
+            schema_registry=self._schema_registry,
+            graph_retriever=retriever,
+        )
 
     # ------------------------------------------------------------------ #
     #  Factory                                                             #
@@ -78,9 +84,12 @@ class QueryRouter:
     def register_schema(self, schema: SchemaDefinition) -> None:
         """Register (or update) a database schema."""
         self._indexer.ingest_schema(schema)
+        self._schema_registry[schema.db_name] = schema.tables
+        self._planner.update_registry(self._schema_registry)
 
     def register_schemas(self, schemas: list[SchemaDefinition]) -> None:
-        self._indexer.ingest_schemas(schemas)
+        for schema in schemas:
+            self.register_schema(schema)
 
     # ------------------------------------------------------------------ #
     #  Online access recording                                             #
@@ -174,6 +183,48 @@ class QueryRouter:
         """
         return self._retriever.explain(query_text, top_n=top_n)
 
+    def plan(
+        self,
+        query_text: str,
+        max_hops: int = 3,
+        max_tables: int = 5,
+        max_entrypoints: int = 3,
+        max_candidate_paths: int = 3,
+        max_mcp_calls: int = 4,
+    ) -> SchemaTraversalPlan:
+        """
+        Produce a budget-aware multi-hop schema traversal plan.
+        """
+        budget = PathBudget(
+            max_hops=max_hops,
+            max_tables=max_tables,
+            max_entrypoints=max_entrypoints,
+            max_candidate_paths=max_candidate_paths,
+            max_mcp_calls=max_mcp_calls,
+        )
+        return self._planner.plan(query_text, budget=budget)
+
+    def plan_dict(
+        self,
+        query_text: str,
+        max_hops: int = 3,
+        max_tables: int = 5,
+        max_entrypoints: int = 3,
+        max_candidate_paths: int = 3,
+        max_mcp_calls: int = 4,
+    ) -> dict:
+        """
+        Convenience wrapper for serializable API responses.
+        """
+        return self.plan(
+            query_text=query_text,
+            max_hops=max_hops,
+            max_tables=max_tables,
+            max_entrypoints=max_entrypoints,
+            max_candidate_paths=max_candidate_paths,
+            max_mcp_calls=max_mcp_calls,
+        ).to_dict()
+
     # ------------------------------------------------------------------ #
     #  Utilities                                                           #
     # ------------------------------------------------------------------ #
@@ -185,6 +236,10 @@ class QueryRouter:
     def rebuild_faiss(self) -> None:
         """Rebuild FAISS index from Neo4j (after restart or corruption)."""
         self._indexer.rebuild_faiss_from_neo4j()
+
+    @property
+    def schema_registry(self) -> dict[str, dict[str, dict]]:
+        return self._schema_registry
 
     def close(self) -> None:
         self._faiss.persist()
