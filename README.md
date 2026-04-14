@@ -20,6 +20,7 @@ This project implements and benchmarks the following retrieval approaches:
 
 | Method | Core Idea |
 |--------|-----------|
+| `Index + Graph Pruning` | Rich table index -> top-k candidates -> schema-graph pruning -> small local subgraph |
 | `SchemaRAG` | Pure embedding similarity over schema text |
 | `GraphRAG` | Neo4j access graph + FAISS query history + community coverage |
 | `GraphRAG Tiered` | Confidence-based lookup reduction on top of GraphRAG |
@@ -32,7 +33,31 @@ The embedding model can also be fine-tuned on `(question, schema)` pairs using `
 
 ## Architecture
 
-### 1. Single-Table Routing
+### 1. Index + Graph Pruning
+
+```text
+NL Question
+  -> Rich Table Index
+     - table name
+     - columns
+     - key columns
+     - join targets
+     - domain tags
+  -> Top-k Table Candidates
+  -> Table-Level Schema Graph
+     - FK / join edges
+     - query-log co-access edges
+  -> Pruning
+     - keep connected candidates only
+     - allow 1~2 hop bridges
+     - seed by score + connectivity
+  -> Small DB-local Subgraph
+  -> MCP inspection order
+```
+
+This is the practical retrieval path for reducing unnecessary table exploration.
+
+### 2. Single-Table Routing
 
 ```text
 NL Question
@@ -44,7 +69,7 @@ NL Question
 
 This is still the default path for classic routing benchmarks.
 
-### 2. Multi-Hop Schema Planning
+### 3. Multi-Hop Schema Planning
 
 ```text
 NL Question
@@ -158,6 +183,8 @@ Spider dev, 1034 questions:
 | Fine-tuned (3k samples, 3 ep) | 53.3% | 73.0% | 0.6525 | 7.8 |
 | **Fine-tuned (full + generated, 5 ep)** | **56.0%** | **77.9%** | **0.6846** | **6.7** |
 
+These numbers come from `compare_models.py`, which evaluates the embedding model only.
+
 - `hit@1 +8.1%p` with full fine-tuning vs base model
 - `avg_lookup` drops from `7.3` to `6.7`
 - Training time: ~2 min on CPU (7000+ pairs, 5 epochs)
@@ -259,6 +286,34 @@ plan = router.plan(
 print(plan.to_dict())
 ```
 
+### Index + Graph Pruning
+
+```python
+from router import QueryRouter
+
+router = QueryRouter.build()
+
+plan = router.retrieve_subgraph(
+    "최근 3개월 재구매율 높은 고객군의 공통 패턴은?",
+    top_k=8,
+    max_hops=2,
+    max_seed_tables=3,
+    max_tables_per_subgraph=8,
+    query_type="customer_pattern",
+)
+
+print(plan.to_dict())
+print(router.execution_log_path)
+```
+
+This flow returns:
+
+- raw index candidates
+- DB-local candidate subgraphs after schema-graph pruning
+- the selected subgraph
+- MCP inspection order
+- a JSONL execution log path for later DSI / GNN supervision
+
 ### API
 
 Run the API:
@@ -272,6 +327,8 @@ Available endpoints:
 - `POST /route`
 - `POST /explain`
 - `POST /plan`
+- `POST /retrieve/subgraph`
+- `POST /retrieve/feedback`
 - `POST /record`
 - `POST /schemas`
 - `POST /rebuild`
@@ -292,15 +349,38 @@ Example `POST /plan` payload:
 }
 ```
 
+Example `POST /retrieve/subgraph` payload:
+
+```json
+{
+  "query": "최근 3개월 재구매율 높은 고객군의 공통 패턴은?",
+  "top_k": 8,
+  "max_hops": 2,
+  "max_seed_tables": 3,
+  "min_component_size": 2,
+  "max_subgraphs": 2,
+  "max_tables_per_subgraph": 8,
+  "query_type": "customer_pattern"
+}
+```
+
 ### Benchmark
 
 ```bash
 python benchmark_v2.py --datasets spider
 python compare_models.py --finetuned models/finetuned_spider_full/final
+python benchmark_index_graph.py --dataset spider --max_samples 200 --top_k 8 --max_hops 2
 ```
 
 Note:
 `benchmark_v2.py` is still centered on single-table routing metrics such as `hit@1` and `MRR`. The planner is implemented and callable, but planner-specific evaluation metrics are not yet integrated into the benchmark suite.
+
+`benchmark_index_graph.py` compares:
+
+- `IndexOnly`
+- `Index + Graph Pruning`
+
+It reports table-set metrics such as average gold-table recall, full coverage rate, average inspected tables, average unnecessary tables, and average latency.
 
 ### Fine-Tuning
 
@@ -320,11 +400,18 @@ graphrag/
   baseline_rag.py
   benchmark.py
   benchmark_v2.py
+  benchmark_index_graph.py
   compare_models.py
   finetune.py
   init_db.py
   query_generator.py
   trainer.py
+  adaptive_retrieval/
+    models.py
+    table_index.py
+    schema_graph.py
+    pipeline.py
+    execution_log.py
   embedding/
     embedder.py
     faiss_index.py

@@ -25,6 +25,15 @@ from __future__ import annotations
 
 from loguru import logger
 
+from adaptive_retrieval import (
+    ExecutionFeedback,
+    ExecutionLogger,
+    IndexGraphPruningPipeline,
+    RetrievalBudget as IndexGraphBudget,
+    RetrievalPlan as IndexGraphPlan,
+    TableIndexRetriever,
+    TableSchemaGraph,
+)
 from embedding.faiss_index import FaissQueryIndex
 from graph_db.neo4j_client import Neo4jClient
 from graph_rag.community import CommunityDetector
@@ -59,6 +68,14 @@ class QueryRouter:
             schema_registry=self._schema_registry,
             graph_retriever=retriever,
         )
+        self._table_index = TableIndexRetriever()
+        self._schema_graph = TableSchemaGraph()
+        self._execution_logger = ExecutionLogger()
+        self._index_graph = IndexGraphPruningPipeline(
+            self._table_index,
+            self._schema_graph,
+            execution_logger=self._execution_logger,
+        )
 
     # ------------------------------------------------------------------ #
     #  Factory                                                             #
@@ -85,11 +102,13 @@ class QueryRouter:
         """Register (or update) a database schema."""
         self._indexer.ingest_schema(schema)
         self._schema_registry[schema.db_name] = schema.tables
-        self._planner.update_registry(self._schema_registry)
+        self._sync_schema_views()
 
     def register_schemas(self, schemas: list[SchemaDefinition]) -> None:
         for schema in schemas:
-            self.register_schema(schema)
+            self._indexer.ingest_schema(schema)
+            self._schema_registry[schema.db_name] = schema.tables
+        self._sync_schema_views()
 
     # ------------------------------------------------------------------ #
     #  Online access recording                                             #
@@ -107,9 +126,11 @@ class QueryRouter:
         Returns the stable query_id (SHA-256 prefix).
         Updates graph + FAISS index incrementally.
         """
-        return self._indexer.ingest_single_access(
+        qid = self._indexer.ingest_single_access(
             query_text, db_name, table_name, count
         )
+        self._schema_graph.record_access(query_text, db_name, table_name, count)
+        return qid
 
     # ------------------------------------------------------------------ #
     #  Bulk historical ingestion                                           #
@@ -130,6 +151,7 @@ class QueryRouter:
             for r in records
         ]
         self._indexer.ingest_access_log(access_records)
+        self._schema_graph.ingest_access_log(access_records)
 
     # ------------------------------------------------------------------ #
     #  Community (re)building                                              #
@@ -182,6 +204,94 @@ class QueryRouter:
         Return full routing explanation including evidence breakdown.
         """
         return self._retriever.explain(query_text, top_n=top_n)
+
+    def retrieve_subgraph(
+        self,
+        query_text: str,
+        top_k: int = 8,
+        max_hops: int = 2,
+        max_seed_tables: int = 3,
+        min_component_size: int = 2,
+        max_subgraphs: int = 2,
+        max_tables_per_subgraph: int = 8,
+        query_type: str = "",
+        gold_tables: list[str] | None = None,
+    ) -> IndexGraphPlan:
+        """
+        Practical retrieval flow:
+        query -> index top-k -> schema graph pruning -> small subgraph.
+        """
+        budget = IndexGraphBudget(
+            top_k=top_k,
+            max_hops=max_hops,
+            max_seed_tables=max_seed_tables,
+            min_component_size=min_component_size,
+            max_subgraphs=max_subgraphs,
+            max_tables_per_subgraph=max_tables_per_subgraph,
+        )
+        return self._index_graph.retrieve(
+            query_text,
+            budget=budget,
+            query_type=query_type,
+            gold_tables=gold_tables,
+        )
+
+    def retrieve_subgraph_dict(
+        self,
+        query_text: str,
+        top_k: int = 8,
+        max_hops: int = 2,
+        max_seed_tables: int = 3,
+        min_component_size: int = 2,
+        max_subgraphs: int = 2,
+        max_tables_per_subgraph: int = 8,
+        query_type: str = "",
+        gold_tables: list[str] | None = None,
+    ) -> dict:
+        return self.retrieve_subgraph(
+            query_text=query_text,
+            top_k=top_k,
+            max_hops=max_hops,
+            max_seed_tables=max_seed_tables,
+            min_component_size=min_component_size,
+            max_subgraphs=max_subgraphs,
+            max_tables_per_subgraph=max_tables_per_subgraph,
+            query_type=query_type,
+            gold_tables=gold_tables,
+        ).to_dict()
+
+    def log_execution_feedback(
+        self,
+        run_id: str,
+        query_text: str,
+        executed_tables: list[str],
+        contributing_tables: list[str],
+        unnecessary_tables: list[str] | None = None,
+        success: bool = True,
+        latency_ms: float = 0.0,
+        final_answer: str = "",
+        notes: str = "",
+        gold_tables: list[str] | None = None,
+        query_type: str = "",
+    ) -> None:
+        """
+        Persist runtime feedback for later DSI / GNN supervision.
+        """
+        self._execution_logger.log_feedback(
+            ExecutionFeedback(
+                run_id=run_id,
+                query=query_text,
+                query_type=query_type,
+                executed_tables=executed_tables,
+                contributing_tables=contributing_tables,
+                unnecessary_tables=unnecessary_tables or [],
+                success=success,
+                latency_ms=latency_ms,
+                final_answer=final_answer,
+                notes=notes,
+                gold_tables=gold_tables or [],
+            )
+        )
 
     def plan(
         self,
@@ -240,6 +350,15 @@ class QueryRouter:
     @property
     def schema_registry(self) -> dict[str, dict[str, dict]]:
         return self._schema_registry
+
+    @property
+    def execution_log_path(self) -> str:
+        return self._execution_logger.path
+
+    def _sync_schema_views(self) -> None:
+        self._planner.update_registry(self._schema_registry)
+        self._table_index.build(self._schema_registry)
+        self._schema_graph.rebuild(self._schema_registry)
 
     def close(self) -> None:
         self._faiss.persist()

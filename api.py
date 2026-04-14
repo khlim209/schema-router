@@ -107,6 +107,37 @@ class PlanRequest(BaseModel):
 class PlanResponse(BaseModel):
     plan: dict[str, Any]
 
+class RetrieveSubgraphRequest(BaseModel):
+    query: str = Field(..., description="Natural-language query")
+    top_k: int = Field(8, description="Number of index candidates to keep")
+    max_hops: int = Field(2, description="Maximum graph hops when connecting candidates")
+    max_seed_tables: int = Field(3, description="How many strong seed tables to probe first")
+    min_component_size: int = Field(2, description="Minimum connected component size to keep")
+    max_subgraphs: int = Field(2, description="How many DB-local candidate subgraphs to return")
+    max_tables_per_subgraph: int = Field(8, description="Cap on retained tables per subgraph")
+    query_type: str = Field("", description="Optional question type tag")
+
+class RetrieveSubgraphResponse(BaseModel):
+    plan: dict[str, Any]
+    execution_log_path: str
+
+class ExecutionFeedbackRequest(BaseModel):
+    run_id: str = Field(..., description="Run ID returned from /retrieve/subgraph")
+    query: str = Field(..., description="Original query text")
+    executed_tables: list[str] = Field(default_factory=list, description="Actual tables inspected by MCP")
+    contributing_tables: list[str] = Field(default_factory=list, description="Tables that materially contributed to the answer")
+    unnecessary_tables: list[str] = Field(default_factory=list, description="Inspected but unused tables")
+    success: bool = Field(True, description="Whether the run produced a satisfactory answer")
+    latency_ms: float = Field(0.0, description="Total runtime for the MCP execution")
+    final_answer: str = Field("", description="Optional final answer or answer summary")
+    notes: str = Field("", description="Optional notes about failure or pruning behaviour")
+    gold_tables: list[str] = Field(default_factory=list, description="Optional gold table set for offline evaluation")
+    query_type: str = Field("", description="Optional question type tag")
+
+class ExecutionFeedbackResponse(BaseModel):
+    message: str
+    execution_log_path: str
+
 class RecordRequest(BaseModel):
     query_text: str = Field(..., description="Query text")
     db_name:    str = Field(..., description="Database name")
@@ -194,6 +225,53 @@ async def plan(req: PlanRequest):
         max_mcp_calls=req.max_mcp_calls,
     )
     return PlanResponse(plan=plan_result)
+
+
+@app.post("/retrieve/subgraph", response_model=RetrieveSubgraphResponse)
+async def retrieve_subgraph(req: RetrieveSubgraphRequest):
+    """
+    Return index candidates plus a schema-graph-pruned local subgraph.
+    """
+    router = _get_router()
+    plan_result = router.retrieve_subgraph_dict(
+        query_text=req.query,
+        top_k=req.top_k,
+        max_hops=req.max_hops,
+        max_seed_tables=req.max_seed_tables,
+        min_component_size=req.min_component_size,
+        max_subgraphs=req.max_subgraphs,
+        max_tables_per_subgraph=req.max_tables_per_subgraph,
+        query_type=req.query_type,
+    )
+    return RetrieveSubgraphResponse(
+        plan=plan_result,
+        execution_log_path=router.execution_log_path,
+    )
+
+
+@app.post("/retrieve/feedback", response_model=ExecutionFeedbackResponse)
+async def log_execution_feedback(req: ExecutionFeedbackRequest):
+    """
+    Persist MCP execution feedback for later DSI / GNN supervision.
+    """
+    router = _get_router()
+    router.log_execution_feedback(
+        run_id=req.run_id,
+        query_text=req.query,
+        executed_tables=req.executed_tables,
+        contributing_tables=req.contributing_tables,
+        unnecessary_tables=req.unnecessary_tables,
+        success=req.success,
+        latency_ms=req.latency_ms,
+        final_answer=req.final_answer,
+        notes=req.notes,
+        gold_tables=req.gold_tables,
+        query_type=req.query_type,
+    )
+    return ExecutionFeedbackResponse(
+        message=f"Stored execution feedback for {req.run_id}",
+        execution_log_path=router.execution_log_path,
+    )
 
 
 @app.post("/record", response_model=RecordResponse)
