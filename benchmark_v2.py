@@ -186,6 +186,65 @@ class MethodMetrics:
         }
 
 
+@dataclass
+class PlannerMetrics:
+    name: str = "SchemaPlanner"
+    entrypoint_hit: list[bool] = field(default_factory=list)
+    path_hit: list[bool] = field(default_factory=list)
+    table_coverage: list[float] = field(default_factory=list)
+    path_cost: list[int] = field(default_factory=list)
+    unnecessary_tables: list[int] = field(default_factory=list)
+    stop_efficiency: list[float] = field(default_factory=list)
+    answer_confidence: list[float] = field(default_factory=list)
+    latencies_ms: list[float] = field(default_factory=list)
+
+    def record(self, plan, correct_db: str, correct_tables: list[str], latency_ms: float) -> None:
+        correct_set = set(correct_tables)
+        top_entry = plan.entrypoints[0] if plan.entrypoints else None
+        top_path = plan.candidate_paths[0] if plan.candidate_paths else None
+
+        entrypoint_ok = bool(
+            top_entry
+            and top_entry.db == correct_db
+            and top_entry.table in correct_set
+        )
+
+        path_tables = top_path.tables if top_path else []
+        if top_path and top_path.db == correct_db:
+            matched_tables = len(correct_set.intersection(path_tables))
+        else:
+            matched_tables = 0
+
+        coverage = matched_tables / max(1, len(correct_set))
+        path_hit = matched_tables == len(correct_set) and len(correct_set) > 0
+        path_cost = len(path_tables)
+        unnecessary = max(0, path_cost - matched_tables)
+        efficiency = matched_tables / max(1, path_cost)
+
+        self.entrypoint_hit.append(entrypoint_ok)
+        self.path_hit.append(path_hit)
+        self.table_coverage.append(coverage)
+        self.path_cost.append(path_cost)
+        self.unnecessary_tables.append(unnecessary)
+        self.stop_efficiency.append(efficiency)
+        self.answer_confidence.append(plan.answer_confidence)
+        self.latencies_ms.append(latency_ms)
+
+    def summary(self) -> dict:
+        n = len(self.table_coverage) or 1
+        return {
+            "method": self.name,
+            "entrypoint_hit": f"{sum(self.entrypoint_hit)/n*100:.1f}%",
+            "path_hit": f"{sum(self.path_hit)/n*100:.1f}%",
+            "table_coverage": f"{np.mean(self.table_coverage)*100:.1f}%",
+            "avg_path_cost": round(float(np.mean(self.path_cost)), 2) if self.path_cost else 0.0,
+            "avg_unnecessary": round(float(np.mean(self.unnecessary_tables)), 2) if self.unnecessary_tables else 0.0,
+            "stop_efficiency": f"{np.mean(self.stop_efficiency)*100:.1f}%",
+            "avg_confidence": f"{np.mean(self.answer_confidence):.3f}",
+            "avg_latency_ms": f"{np.mean(self.latencies_ms):.2f}",
+        }
+
+
 # ──────────────────────────────────────────────────────────────────────── #
 #  GraphRAG NoComm 라우팅 (커뮤니티 제외 버전)                             #
 # ──────────────────────────────────────────────────────────────────────── #
@@ -264,6 +323,11 @@ def run_dataset_benchmark(
     generated_samples: list[BenchmarkSample],
     sample_label:   str = "original",
     three_stage_pipeline: ThreeStagePipeline | None = None,
+    planner_max_hops: int = 3,
+    planner_max_tables: int = 5,
+    planner_max_entrypoints: int = 3,
+    planner_max_candidate_paths: int = 3,
+    planner_max_mcp_calls: int = 4,
 ) -> dict:
     """
     단일 데이터셋에 대해 세 방법을 비교한다.
@@ -290,6 +354,7 @@ def run_dataset_benchmark(
         "GraphRAG_Tiered":     MethodMetrics("GraphRAG_Tiered"),
         "ThreeStage":          MethodMetrics("ThreeStage"),          # 3단계 파이프라인
     }
+    planner_metrics = PlannerMetrics()
 
     neo4j     = router._neo4j
     faiss     = router._faiss
@@ -380,6 +445,19 @@ def run_dataset_benchmark(
                 ranked_baseline, db, correct_tables, 0.0, n_cypher=0
             )
 
+        # ── Schema Planner (멀티홉 경로 계획) ──────────────────────────────
+        t0 = time.perf_counter()
+        plan = router.plan(
+            q,
+            max_hops=planner_max_hops,
+            max_tables=planner_max_tables,
+            max_entrypoints=planner_max_entrypoints,
+            max_candidate_paths=planner_max_candidate_paths,
+            max_mcp_calls=planner_max_mcp_calls,
+        )
+        lat = (time.perf_counter() - t0) * 1000
+        planner_metrics.record(plan, db, correct_tables, lat)
+
     # ── 요약 계산 ─────────────────────────────────────────────────────
     baseline_avg = float(np.mean(metrics["SchemaRAG_Baseline"].lookup_counts))
     summaries    = [m.summary(baseline_avg) for m in metrics.values()]
@@ -391,6 +469,7 @@ def run_dataset_benchmark(
         "n_original": len(samples),
         "n_generated": len(generated_samples),
         "results":   summaries,
+        "planner": planner_metrics.summary(),
     }
 
 
@@ -455,6 +534,18 @@ def print_dataset_results(result: dict) -> None:
                 f"  {m['lookup_reduction']:>12}"
             )
 
+    planner = result.get("planner")
+    if planner:
+        print(f"\n  Planner metrics (top candidate path 기준):")
+        print(f"  {'entrypoint_hit':<18} {planner['entrypoint_hit']}")
+        print(f"  {'path_hit':<18} {planner['path_hit']}")
+        print(f"  {'table_coverage':<18} {planner['table_coverage']}")
+        print(f"  {'avg_path_cost':<18} {planner['avg_path_cost']}")
+        print(f"  {'avg_unnecessary':<18} {planner['avg_unnecessary']}")
+        print(f"  {'stop_efficiency':<18} {planner['stop_efficiency']}")
+        print(f"  {'avg_confidence':<18} {planner['avg_confidence']}")
+        print(f"  {'avg_latency_ms':<18} {planner['avg_latency_ms']}")
+
 
 def print_cross_dataset_summary(all_results: list[dict]) -> None:
     """데이터셋 간 hit@1 / lookup_reduction 비교표."""
@@ -472,6 +563,28 @@ def print_cross_dataset_summary(all_results: list[dict]) -> None:
                 f"{str(s['avg_lookup']):>11}  {s['lookup_reduction']:>17}"
             )
         print()
+
+    print(f"\n{'='*90}")
+    print("  Cross-dataset Planner Summary")
+    print(f"{'='*90}")
+    planner_header = (
+        f"  {'Dataset':<12}  {'entrypoint_hit':>14}  {'path_hit':>10}  "
+        f"{'table_coverage':>16}  {'avg_path_cost':>14}  {'avg_unnecessary':>17}"
+    )
+    print(planner_header)
+    print(f"  {'-'*95}")
+    for r in all_results:
+        planner = r.get("planner")
+        if not planner:
+            continue
+        print(
+            f"  {r['dataset']:<12}  "
+            f"{planner['entrypoint_hit']:>14}  "
+            f"{planner['path_hit']:>10}  "
+            f"{planner['table_coverage']:>16}  "
+            f"{str(planner['avg_path_cost']):>14}  "
+            f"{str(planner['avg_unnecessary']):>17}"
+        )
 
 
 # ──────────────────────────────────────────────────────────────────────── #
@@ -571,12 +684,25 @@ def main():
         "--no_generate", action="store_true",
         help="자동 질의 생성 비활성화",
     )
+    parser.add_argument("--planner_max_hops", type=int, default=3,
+                        help="schema planner 최대 join hop 수")
+    parser.add_argument("--planner_max_tables", type=int, default=5,
+                        help="schema planner 후보 path 최대 테이블 수")
+    parser.add_argument("--planner_max_entrypoints", type=int, default=3,
+                        help="schema planner가 유지할 entrypoint 수")
+    parser.add_argument("--planner_max_candidate_paths", type=int, default=3,
+                        help="schema planner가 유지할 candidate path 수")
+    parser.add_argument("--planner_max_mcp_calls", type=int, default=4,
+                        help="schema planner MCP call budget")
     args = parser.parse_args()
 
     print("=" * 90)
     print("  GraphRAG Query Router — Benchmark v2")
     print(f"  데이터셋: {args.datasets}  |  샘플 수: {args.max_samples}  |"
           f"  생성 질의: {'OFF' if args.no_generate else args.gen_per_table}/table")
+    print(f"  Planner budget: hops={args.planner_max_hops}, tables={args.planner_max_tables}, "
+          f"entrypoints={args.planner_max_entrypoints}, paths={args.planner_max_candidate_paths}, "
+          f"mcp_calls={args.planner_max_mcp_calls}")
     print("=" * 90)
 
     # ── 라우터 초기화 ─────────────────────────────────────────────────
@@ -654,6 +780,11 @@ def main():
             baseline              = baseline,
             generated_samples     = generated,
             three_stage_pipeline  = three_stage,
+            planner_max_hops      = args.planner_max_hops,
+            planner_max_tables    = args.planner_max_tables,
+            planner_max_entrypoints = args.planner_max_entrypoints,
+            planner_max_candidate_paths = args.planner_max_candidate_paths,
+            planner_max_mcp_calls = args.planner_max_mcp_calls,
         )
         all_results.append(result)
         print_dataset_results(result)
